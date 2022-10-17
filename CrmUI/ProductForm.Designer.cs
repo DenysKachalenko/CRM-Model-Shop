@@ -107,6 +107,11 @@
             this.NUDCount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.NUDCount.Location = new System.Drawing.Point(53, 58);
+            this.NUDCount.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
             this.NUDCount.Name = "NUDCount";
             this.NUDCount.Size = new System.Drawing.Size(237, 20);
             this.NUDCount.TabIndex = 8;

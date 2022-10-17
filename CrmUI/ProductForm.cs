@@ -21,6 +21,14 @@ namespace CrmUI
             InitializeComponent();
         }
 
+        public ProductForm(Product Product) : this()
+        {
+            this.Product = Product;
+            TBName.Text = Product.Name;
+            NUDPrice.Value = Product.Price;
+            NUDCount.Value = Product.Count;
+        }
+
         private void ProductForm_Load(object sender, EventArgs e)
         {
 
@@ -28,12 +36,11 @@ namespace CrmUI
 
         private void BOK_Click(object sender, EventArgs e)
         {
-            Product = new Product()
-            {
-                Name = TBName.Text,
-                Price = NUDPrice.Value,
-                Count = Convert.ToInt32(NUDCount.Value)
-            };
+            var p = Product ?? new Product();
+            p.Name = TBName.Text;
+            p.Price = NUDPrice.Value;
+            p.Count = Convert.ToInt32(NUDCount.Value);
+
             Close();
         }
     }
