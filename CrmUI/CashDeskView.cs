@@ -14,7 +14,7 @@ namespace CrmUI
         public ProgressBar ProgressBar { get; set; }
 
         public CashDeskView(CashDesk cashDesk, int number, int x, int y)
-        {     
+        {
             this.CashDesk = cashDesk;
 
             CashDeskNameLabel = new Label();
@@ -54,9 +54,9 @@ namespace CrmUI
 
         private void CashDesk_CheckClosed(object sender, Check e)
         {
-            NumericUpDown.Invoke((Action)delegate 
-            { 
-                NumericUpDown.Value += e.Price; 
+            NumericUpDown.Invoke((Action)delegate
+            {
+                NumericUpDown.Value += e.Price;
                 ProgressBar.Value = CashDesk.Count;
                 LeaveCustomerLabel.Text = CashDesk.ExitCustomer.ToString();
             });

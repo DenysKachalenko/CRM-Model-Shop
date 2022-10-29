@@ -14,11 +14,19 @@ namespace CrmUI
     public partial class Main : Form
     {
         CrmContext db;
+        Cart Cart;
+        Customer Customer;
+        CashDesk CashDesk;
 
         public Main()
         {
             InitializeComponent();
             db = new CrmContext();
+            Cart = new Cart(Customer);
+            CashDesk = new CashDesk(1, db.Sellers.FirstOrDefault(), db)
+            {
+                IsModel = false
+            };
         }
 
         private void productToolStripMenuItem_Click(object sender, EventArgs e)
@@ -79,6 +87,75 @@ namespace CrmUI
         {
             var Form = new ModelForm();
             Form.Show();
+        }
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                LBProducts.Invoke((Action)delegate
+                {
+                    LBProducts.Items.AddRange(db.Products.ToArray());
+                    UpdateLists();
+                });
+            });
+        }
+
+        private void LBProducts_DoubleClick(object sender, EventArgs e)
+        {
+            if (LBProducts.SelectedItem is Product product)
+            {
+                Cart.Add(product);
+                LBCart.Items.Add(product);
+                UpdateLists();
+            }
+        }
+
+        private void UpdateLists() 
+        {
+            LBCart.Items.Clear();
+            LBCart.Items.AddRange(Cart.GetAll().ToArray());
+            LSum.Text = "Sum: " + Cart.Price;
+        }
+
+        private void LLUser_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var form = new Login();
+            form.ShowDialog();
+            if (form.DialogResult == DialogResult.OK)
+            {
+                var tempCustomer = db.Customers.FirstOrDefault(c => c.Name.Equals(form.Customer.Name));
+                if (tempCustomer != null)
+                {
+                    Customer = tempCustomer;
+                }
+                else
+                {
+                    db.Customers.Add(form.Customer);
+                    db.SaveChanges();
+                    Customer = form.Customer;
+                }
+                Cart.Customer = Customer;
+
+                LLUser.Text = $"Hello, {Customer.Name}!";
+            }
+        }
+
+        private void BPay_Click(object sender, EventArgs e)
+        {
+            if (Customer != null)
+            {
+                CashDesk.Enqueue(Cart);
+                var price = CashDesk.Dequeue();
+                LBCart.Items.Clear();
+                Cart = new Cart(Customer);
+
+                MessageBox.Show("Successfull pay! Sum: " + price, "Pay completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else 
+            {
+                MessageBox.Show("Please, login", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }
