@@ -23,7 +23,7 @@ namespace CrmUI
 
         public ProductForm(Product Product) : this()
         {
-            this.Product = Product;
+            this.Product = Product ?? new Product();
             TBName.Text = Product.Name;
             NUDPrice.Value = Product.Price;
             NUDCount.Value = Product.Count;
@@ -36,10 +36,10 @@ namespace CrmUI
 
         private void BOK_Click(object sender, EventArgs e)
         {
-            var p = Product ?? new Product();
-            p.Name = TBName.Text;
-            p.Price = NUDPrice.Value;
-            p.Count = Convert.ToInt32(NUDCount.Value);
+            Product = Product ?? new Product();
+            Product.Name = TBName.Text;
+            Product.Price = NUDPrice.Value;
+            Product.Count = Convert.ToInt32(NUDCount.Value);
 
             Close();
         }

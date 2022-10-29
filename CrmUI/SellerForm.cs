@@ -22,7 +22,7 @@ namespace CrmUI
 
         public SellerForm(Seller Seller) : this()
         {
-            this.Seller = Seller;
+            this.Seller = Seller ?? new Seller();
             TBName.Text = Seller.Name;
         }
 
@@ -33,8 +33,8 @@ namespace CrmUI
 
         private void BOK_Click(object sender, EventArgs e)
         {
-            var s = Seller ?? new Seller();
-            s.Name = TBName.Text;
+            Seller = Seller ?? new Seller();
+            Seller.Name = TBName.Text;
 
             Close();
         }

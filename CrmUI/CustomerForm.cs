@@ -22,7 +22,7 @@ namespace CrmUI
 
         public CustomerForm(Customer Customer) : this()
         {
-            this.Customer = Customer;
+            this.Customer = Customer ?? new Customer();
             TBName.Text = Customer.Name;
         }
 
@@ -33,8 +33,8 @@ namespace CrmUI
 
         private void BOK_Click(object sender, EventArgs e)
         {
-            var c = Customer ?? new Customer();
-            c.Name = TBName.Text;
+            Customer = Customer ?? new Customer();
+            Customer.Name = TBName.Text;
 
             Close();
         }
